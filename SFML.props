@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+    <SFMLx86>F:\SFML\SFML-2.4.0-windows-vc14-32-bit\SFML-2.4.0</SFMLx86>
+    <SFMLx64>F:\SFML\SFML-2.4.0-windows-vc14-64-bit\SFML-2.4.0</SFMLx64>
+    <!-- Conditional macros -->
+    <SFML Condition="'$(Platform)'=='Win32'">$(SFMLx86)</SFML>
+    <SFML Condition="'$(Platform)'=='x64'">$(SFMLx64)</SFML>
+    <SFMLDependencies Condition="'$(Configuration)'=='Debug'">sfml-main-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib</SFMLDependencies>
+    <SFMLDependencies Condition="'$(Configuration)'=='Release'">sfml-main.lib;sfml-graphics.lib;sfml-window.lib;sfml-system.lib</SFMLDependencies>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SFML)\include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SFML)\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SFMLDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="SFMLx86">
+      <Value>$(SFMLx86)</Value>
+    </BuildMacro>
+    <BuildMacro Include="SFMLx64">
+      <Value>$(SFMLx64)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

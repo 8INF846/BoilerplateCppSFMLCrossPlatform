@@ -1,0 +1,77 @@
+\ProvidesPackage{sectioncompilation}
+\RequirePackage{hyperref}
+
+\renewcommand*{\sectioncompilation}[1][0] {
+  \section{Compilation}
+  \subsection{Linux (gcc)}
+  \subsubsection{Dépendances}
+  Sous Linux les dépendances suivantes doivent êtres installées :
+  \begin{itemize}
+    \item Clang++
+    \item make (paquet {build-essential})
+    \item SFML 2.1 (paquet {libsfml-dev})
+  \end{itemize}
+  \subsubsection{Procédure}
+  Se rendre dans le dossier \emph{<Projet>/src} puis exécuter la commande
+  {make}. Le binaire sera alors créé dans le dossier \emph{./src}.
+
+  \subsection{Windows (msvc)}
+  \subsubsection{Dépendances}
+  Sous Windows les dépendances suivantes doivent être installées :
+  \begin{itemize}
+    \item Visual C++ 2015
+    \item SFML 2.1
+  \end{itemize}
+
+
+  % IF SFML is not provided
+  \IfEqCase{#1}{%
+    {0}{
+      La librairie SFML n'est pas fournie alléger les sources et pour la
+      partager entre plusieurs projets. Il faut donc se rendre à l'adresse :
+      \begin{center}
+        \url{http://www.sfml-dev.org/download/sfml/2.1/index-fr.php}
+      \end{center}
+      puis télécharger pour architecture 32 ou 64 bits la version :
+      \begin{center}
+        Visual~C++~11~(2012)
+      \end{center}
+      et enfin extraire l'archive reçue n'importe où sur l'espace de stockage de
+      l'ordinateur.
+
+      \subsubsection{Procédure}
+      La procédure suivante doit être accomplie pour compiler correctement sous
+      Visual Studio :
+      \begin{itemize}
+        \item Copier les fichiers \emph{.dll} du dossier \emph{<SFML>/bin} vers
+          le dossier de compilation (\emph{<Projet>/VisualStudio/Debug} ou
+          \emph{<Projet>/VisualStudio/Release} selon le mode de compilation
+          désiré).
+        \item Préciser à Visual Studio le chemin vers \emph{<SFML>}
+          \begin{itemize}
+            \item Afficher l'interface "Property Manager" :
+              \\~~\emph{View $\rightarrow$ Other windows $\rightarrow$ Property
+              Manager}
+            \item Ouvrir le fichier de propriété "SFML" via l'interface ouverte :
+              \\~~\emph{<Pojet> $\rightarrow$ <Environement>/<Plateforme>
+              $\rightarrow$ SFML}
+            \item Renseigner le chemin vers la SFML selon la plateforme choisie :
+              \\~~\emph{User Macros $\rightarrow$ SFMLx86 ou SFMLx64}
+          \end{itemize}
+        \item Lancer la compilation pour la plateforme choisie (x86 ou x64).
+      \end{itemize}
+
+      % ELSE If SFML is provided
+    }
+    {1}{
+      La librairie SFLK est fournie avec les source et configurée adéquatement.
+
+      \subsubsection{Procédure}
+      Ouvrir Visual Studio puis lancer la compilation en mode Debug ou Release
+      pour une plateforme x86.
+    }
+    % END IF
+  }[\PackageError{tree}{Undefined option to sectioncompilation: #1}{}]
+}
+
+\endinput
