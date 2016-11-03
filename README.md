@@ -1,3 +1,3 @@
-# Boilerplate pour projet C++ cross-plateforme utilisant la SFML
+# Boilerplate pour projet C++/SFML cross-plateforme
 
 Parce que le cross-plateforme c'est la vie.
