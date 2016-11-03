@@ -1,0 +1,10 @@
+Debug
+Release
+bin
+report.aux
+report.log
+report.out
+report.pdf
+report.pyg
+report.synctex.gz
+texput.log
