@@ -4,6 +4,7 @@
 // #include "Data.h"
 // #include "Logic.h"
 #include "Displayer.h"
+#include "Map.hpp"
 
 int main(int argc, char* argv[]) {
     // Initialise data

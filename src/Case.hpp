@@ -4,19 +4,23 @@ struct Case {
 public:
     // Attributes
     bool monster;
-    bool crevasse;
+    bool hole;
     bool portal;
     bool walkable;
 
     // Constructors
+    Case()  : monster(false)
+            , hole(false)
+            , portal(false)
+            , walkable(true) {}
     Case(bool walkable)
             : monster(false)
-            , crevasse(false)
+            , hole(false)
             , portal(false)
             , walkable(walkable) {}
-    Case(bool monster, bool crevasse, bool portal)
+    Case(bool monster, bool hole, bool portal)
             : monster(monster)
-            , crevasse(crevasse)
+            , hole(hole)
             , portal(portal)
             , walkable(true) {}
 };

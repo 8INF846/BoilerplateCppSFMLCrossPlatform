@@ -13,10 +13,11 @@ endif
 # Clean at each compilation
 .PHONY: clean
 
+all: clean app
+
 # Commands
 clean:
 	rm -f *.gch $(OUTNAME)
-all: clean app
 
 app:
 	$(CC) $(CPP_FILES) -o $(OUTNAME) $(LD_FLAGS) $(CC_FLAGS)
