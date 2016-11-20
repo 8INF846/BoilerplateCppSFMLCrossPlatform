@@ -34,6 +34,13 @@ void Map::initializeMap() {
     }
 }
 
+const Case Map::getCase(const unsigned int row, const unsigned int col) {
+   if(row >= mapSize || col >= mapSize) {
+       return Case(false);
+   }
+   return this->cases[row][col];
+}
+
 void Map::initNextRound() {
     ++this->mapSize;
     this->initializeMap();

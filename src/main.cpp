@@ -11,7 +11,10 @@ int main(int argc, char* argv[]) {
     /*Data data();*/
 
     // Initialize graphic interface
-    Displayer displayer;
+    Map map;
+    for(int i = 0; i < 3; ++i)
+    map.initNextRound();
+    Displayer displayer(map);
     std::thread displayerThread;
 
     try {
@@ -22,7 +25,6 @@ int main(int argc, char* argv[]) {
         // Do stuff with data
         /*Logic logic(data);*/
         /*Logic.start();*/
-        throw std::logic_error("Nothing to do !");
 
         // Wait for graphic interface to be closed before exiting
         displayerThread.join();

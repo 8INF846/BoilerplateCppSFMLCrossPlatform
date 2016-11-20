@@ -7,10 +7,12 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Map.hpp"
+
 class Displayer {
 public:
     /* Constructor */
-    Displayer(int width = 854, int height = 480);
+    Displayer(Map& map, int width = 854, int height = 480);
 
     /* methods */
     // Start displaying sudoku while it is being solved.
@@ -45,6 +47,9 @@ private:
     void run();
     // Events loop
     void handleEvents();
+
+    // Object to render
+    Map& map;
 };
 
 #endif
