@@ -14,6 +14,8 @@ public:
     size_t size() { return mapSize; }
 
     const Case getCase(const unsigned int row, const unsigned int col);
+    bool hasWind(const unsigned int row, const unsigned int col);
+    bool hasPoop(const unsigned int row, const unsigned int col);
 
     /*
     Case operator()(int i, int j) {

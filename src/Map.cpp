@@ -3,8 +3,8 @@
 #include <iostream>
 #include <random>
 
-#define MONSTER_PROB  20
-#define HOLE_PROB     10
+#define MONSTER_PROB  10
+#define HOLE_PROB     5
 
 Map::Map(const size_t baseSize) : mapSize(baseSize) {
     initializeMap();
@@ -28,6 +28,7 @@ void Map::initializeMap() {
             } else if (c != portalC && r != portalR) {
                 bool isMonster = percent_rand(e1) < MONSTER_PROB;
                 bool isHole = percent_rand(e1) < HOLE_PROB;
+                if(isMonster) isHole = false;
                 this->cases[r][c] = Case(isMonster, isHole, false);
             }
         }
@@ -35,13 +36,29 @@ void Map::initializeMap() {
 }
 
 const Case Map::getCase(const unsigned int row, const unsigned int col) {
-   if(row >= mapSize || col >= mapSize) {
-       return Case(false);
-   }
-   return this->cases[row][col];
+    if(row >= mapSize || col >= mapSize) {
+        return Case(false);
+    }
+    return this->cases[row][col];
 }
 
 void Map::initNextRound() {
     ++this->mapSize;
     this->initializeMap();
+}
+
+bool Map::hasWind(const unsigned int row, const unsigned int col) {
+    Case u = this->getCase(row, col - 1);
+    Case d = this->getCase(row, col + 1);
+    Case l = this->getCase(row - 1, col);
+    Case r = this->getCase(row + 1, col);
+    return u.hole || d.hole || l.hole || r.hole;
+}
+
+bool Map::hasPoop(const unsigned int row, const unsigned int col) {
+    Case u = this->getCase(row, col - 1);
+    Case d = this->getCase(row, col + 1);
+    Case l = this->getCase(row - 1, col);
+    Case r = this->getCase(row + 1, col);
+    return u.monster || d.monster || l.monster || r.monster;
 }

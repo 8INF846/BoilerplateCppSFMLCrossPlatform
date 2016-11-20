@@ -58,10 +58,18 @@ void Displayer::drawScene() {
     textureWalkable2.loadFromFile("img/walkable2.png", sf::IntRect(0, 0, 100, 100));
     sf::Texture textureMonster;
     textureMonster.loadFromFile("img/monster.png", sf::IntRect(0, 0, 100, 100));
+    sf::Texture textureMonsterDown;
+    textureMonsterDown.loadFromFile("img/monster_down.png", sf::IntRect(0, 0, 100, 100));
     sf::Texture textureHole;
     textureHole.loadFromFile("img/hole.png", sf::IntRect(0, 0, 100, 100));
     sf::Texture texturePortal;
     texturePortal.loadFromFile("img/portal.png", sf::IntRect(0, 0, 100, 100));
+    sf::Texture texturePoop;
+    texturePoop.loadFromFile("img/poop.png", sf::IntRect(0, 0, 100, 100));
+    sf::Texture textureWind;
+    textureWind.loadFromFile("img/wind.png", sf::IntRect(0, 0, 100, 100));
+    sf::Texture texturePlayer;
+    texturePlayer.loadFromFile("img/player.png", sf::IntRect(0, 0, 100, 100));
 
     m_pWindow->clear(sf::Color(0, 0, 0));
     for(size_t r = 0; r < this->map.size(); ++r) {
@@ -81,10 +89,30 @@ void Displayer::drawScene() {
                     sprite.setTexture(textureWalkable2, true);
                 }
             }
+
             sprite.setPosition(100*r, 100*c);
             m_pWindow->draw(sprite);
+
+            if(this->map.hasPoop(r, c)) {
+                sf::Sprite spritePoop;
+                spritePoop.setPosition(100*r, 100*c);
+                spritePoop.setTexture(texturePoop, true);
+                m_pWindow->draw(spritePoop);
+            }
+            if(this->map.hasWind(r, c)) {
+                sf::Sprite spriteWind;
+                spriteWind.setPosition(100*r, 100*c);
+                spriteWind.setTexture(textureWind, true);
+                m_pWindow->draw(spriteWind);
+            }
+            //TODO player
+            if(r == 0 && c == 0) {
+                sf::Sprite spritePlayer;
+                spritePlayer.setPosition(100*r, 100*c);
+                spritePlayer.setTexture(texturePlayer, true);
+                m_pWindow->draw(spritePlayer);
+            }
         }
     }
-    //TODO draw wind/perso/shit
     m_pWindow->display();
 }
