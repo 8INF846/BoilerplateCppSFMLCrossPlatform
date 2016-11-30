@@ -11,3 +11,8 @@ public:
     bool left;
     bool right;
 };
+
+enum Movement {
+    RUNOUT,
+    DONOTHING
+};

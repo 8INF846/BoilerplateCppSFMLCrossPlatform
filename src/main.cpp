@@ -5,10 +5,32 @@
 // #include "Logic.h"
 #include "Displayer.h"
 #include "Map.hpp"
+#include "SWI-cpp.h"
+#include "Knowledge.hpp"
+
+PREDICATE(light, 2)
+{
+    return false; //if we detect light at pos(X,Y)
+    //I think we need a global player case
+}
+
+PREDICATE(next_movement, 0) {
+    PlTermv arg(2);
+    arg[0] = 0; //get player current x
+    arg[1] = 0; //get player current y
+    if(PlCall("runOut", arg)) {
+        std::cout << "Portail trouvé, on sort" << std::endl;
+        return RUNOUT;
+    }
+    std::cout << "Portail non trouvé, on ne bouge pas" << std::endl;
+    return DONOTHING;
+}
+
 
 int main(int argc, char* argv[]) {
-    // Initialise data
-    /*Data data();*/
+    PlEngine e(argv[0]);
+    PlTermv av(0);
+    PlCall("next_movement", av);
 
     // Initialize graphic interface
     Map map;
