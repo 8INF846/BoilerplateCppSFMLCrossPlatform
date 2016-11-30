@@ -10,6 +10,7 @@ public:
     bool down;
     bool left;
     bool right;
+    bool visited;
 };
 
 enum Movement {

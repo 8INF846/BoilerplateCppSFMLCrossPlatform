@@ -2,6 +2,9 @@
 
 #include "Map.hpp"
 #include "Knowledge.hpp"
+#include "Position.hpp"
+
+#include <vector>
 
 /*
 
@@ -14,7 +17,6 @@ Si Odeur(x-1,y) & Odeur(x+1,y) & Odeur(x,y-1) & Odeur(x,y+1) => Monstre(x,y)
 Si Vent(x-1,y) & Vent(x+1,y) & Vent(x,y-1) & Vent(x,y+1) => Crevasse(x,y)
 Si Tirer(x,y) => !Monstre(x,y)
 Si !Monstre(x,y) & !Crevasse(x,y) => Safe(x,y)
-*/
 
 enum Action {
     ShootUp,
@@ -26,39 +28,39 @@ enum Action {
     MoveLeft,
     MoveRight
 };
+*/
 
 class Player {
 public:
-    // Constructor
-    Player(Position position, Map& map);
+    static Player *instance(Map& map)
+    {
+        if (s_instance == nullptr)
+          s_instance = new Player(map);
+        return s_instance;
+    }
+
+    Position getPosition() { return m_position; }
+    Map& getMap() { return m_map; };
+    std::vector<std::vector<Knowledge>>& getKnowledgeMap() { return m_knowledgeMap; }
+
+    void initKnowledgeMap();
+    void updateEnvironment();
+
+    bool isLight(unsigned int x, unsigned int y);
 
     // Methods
-    void Play() {
+    /*void Play() {
         Knowledge knowledge = inspectEnvironment();
         Action action = chooseAction(knoledge);
         return action;
-    }
+    }*/
 private:
+    static Player *s_instance;
+    Player(Map& map);
     // Attributes
-    Position position;
-    Map& map;
-    Action action;
-
-    // Methods
-    Knowledge inspectEnvironment() {
-        Case u = Map(position.x, position.y - 1);
-        Case d = Map(position.x, position.y + 1);
-        Case l = Map(position.x - 1, position.y);
-        Case r = Map(position.x + 1, position.y);
-
-        return Sensor(
-            u.monster || d.monster || l.monster || r.monster,
-            u.crevasse || d.crevasse || l.crevasse || r.crevasse,
-            Map(position.x, position.y).portal,
-            u.walkable,
-            d.walkable,
-            l.walkable,
-            r.walkable);
-    }
-    Action chooseAction(const Knoledge& knoledge);
+    Position m_position;
+    Map& m_map;
+    std::vector<std::vector<Knowledge>> m_knowledgeMap;
+    /*Action action;
+    Action chooseAction(const Knoledge& knoledge);*/
 };

@@ -20,5 +20,4 @@ clean:
 	rm -f *.gch $(OUTNAME)
 
 app:
-	#$(CC) $(CPP_FILES) -o $(OUTNAME) $(LD_FLAGS) $(CC_FLAGS)
 	swipl-ld -o $(OUTNAME) -ld clang++  $(CPP_FILES) $(LD_FLAGS) $(CC_FLAGS) rules.pl

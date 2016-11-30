@@ -6,12 +6,15 @@
 #include "Displayer.h"
 #include "Map.hpp"
 #include "SWI-cpp.h"
-#include "Knowledge.hpp"
+#include "Player.hpp"
+
+Map GLOBALMAP;
 
 PREDICATE(light, 2)
 {
-    return false; //if we detect light at pos(X,Y)
-    //I think we need a global player case
+    unsigned int x = int(A1);
+    unsigned int y = int(A2);
+    return Player::instance(GLOBALMAP)->isLight(x, y);
 }
 
 PREDICATE(next_movement, 0) {
@@ -31,12 +34,13 @@ int main(int argc, char* argv[]) {
     PlEngine e(argv[0]);
     PlTermv av(0);
     PlCall("next_movement", av);
+    Player::instance(GLOBALMAP)->getKnowledgeMap()[0][0].light = true;
+    PlCall("next_movement", av);
 
     // Initialize graphic interface
-    Map map;
     for(int i = 0; i < 3; ++i)
-    map.initNextRound();
-    Displayer displayer(map);
+    GLOBALMAP.initNextRound();
+    Displayer displayer(GLOBALMAP);
     std::thread displayerThread;
 
     try {

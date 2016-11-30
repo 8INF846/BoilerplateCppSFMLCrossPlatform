@@ -21,6 +21,20 @@ public:
     // Wait thread until displayer is ready to display data.
     void waitReady();
 
+private:
+    /* Attributes */
+    // Whether or not window is ready
+    std::mutex m_ready;
+
+    /* Methods */
+    // Display loop
+    void run();
+    // Events loop
+    void handleEvents();
+
+    // Object to render
+    Map& map;
+
 protected:
     /* Attributes */
     // Width of the window
@@ -36,20 +50,6 @@ protected:
 
     // Handle client input.
     virtual void handleEvent(sf::Event& event);
-
-private:
-    /* Attributes */
-    // Whether or not window is ready
-    std::mutex m_ready;
-
-    /* Methods */
-    // Display loop
-    void run();
-    // Events loop
-    void handleEvents();
-
-    // Object to render
-    Map& map;
 };
 
 #endif
