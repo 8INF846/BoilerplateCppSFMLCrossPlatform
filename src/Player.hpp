@@ -46,14 +46,15 @@ public:
     void initKnowledgeMap();
     void updateEnvironment();
 
+    bool isOdor(unsigned int x, unsigned int y);
+    bool isWind(unsigned int x, unsigned int y);
     bool isLight(unsigned int x, unsigned int y);
+    bool isUp(unsigned int x, unsigned int y);
+    bool isDown(unsigned int x, unsigned int y);
+    bool isLeft(unsigned int x, unsigned int y);
+    bool isRight(unsigned int x, unsigned int y);
 
-    // Methods
-    /*void Play() {
-        Knowledge knowledge = inspectEnvironment();
-        Action action = chooseAction(knoledge);
-        return action;
-    }*/
+    void playRound();
 private:
     static Player *s_instance;
     Player(Map& map);
@@ -61,6 +62,4 @@ private:
     Position m_position;
     Map& m_map;
     std::vector<std::vector<Knowledge>> m_knowledgeMap;
-    /*Action action;
-    Action chooseAction(const Knoledge& knoledge);*/
 };

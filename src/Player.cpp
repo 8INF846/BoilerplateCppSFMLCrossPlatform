@@ -1,4 +1,6 @@
 #include "Player.hpp"
+#include "SWI-cpp.h"
+#include <iostream>
 
 Player *Player::s_instance = nullptr;
 
@@ -43,7 +45,42 @@ void Player::updateEnvironment() {
     m_knowledgeMap[m_position.y][m_position.x].visited = true;
 }
 
+bool Player::isOdor(unsigned int x, unsigned int y) {
+    if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
+    return m_knowledgeMap[y][x].odor;
+}
+
+bool Player::isWind(unsigned int x, unsigned int y) {
+    if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
+    return m_knowledgeMap[y][x].wind;
+}
+
 bool Player::isLight(unsigned int x, unsigned int y) {
     if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
     return m_knowledgeMap[y][x].light;
+}
+
+bool Player::isUp(unsigned int x, unsigned int y) {
+    if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
+    return m_knowledgeMap[y][x].up;
+}
+
+bool Player::isDown(unsigned int x, unsigned int y) {
+    if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
+    return m_knowledgeMap[y][x].down;
+}
+
+bool Player::isLeft(unsigned int x, unsigned int y) {
+    if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
+    return m_knowledgeMap[y][x].left;
+}
+
+bool Player::isRight(unsigned int x, unsigned int y) {
+    if(x > m_knowledgeMap.size() || y > m_knowledgeMap.size()) return false;
+    return m_knowledgeMap[y][x].right;
+}
+
+void Player::playRound() {
+    updateEnvironment();
+    std::cout << "play round" << std::endl;
 }

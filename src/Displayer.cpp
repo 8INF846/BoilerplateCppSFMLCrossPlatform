@@ -1,6 +1,9 @@
 #include <iostream>
 #include <algorithm>
 #include "Displayer.h"
+#include "Player.hpp"
+#include "SWI-cpp.h"
+#include <iostream>
 
 /* Constructors */
 Displayer::Displayer(Map &map, int width, int height): map(map), m_width(width), m_height(height) {}
@@ -115,4 +118,7 @@ void Displayer::drawScene() {
         }
     }
     m_pWindow->display();
+    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        Player::instance(this->map)->playRound();
+    }
 }
