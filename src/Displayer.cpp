@@ -117,10 +117,10 @@ void Displayer::drawScene() {
                 spriteWind.setTexture(textureWind, true);
                 m_pWindow->draw(spriteWind);
             }
-            //TODO player
             if(r == 0 && c == 0) {
                 sf::Sprite spritePlayer;
-                spritePlayer.setPosition(100*r, 100*c);
+                Position posPlayer = this->player.getPosition();
+                spritePlayer.setPosition(100*posPlayer.y, 100*posPlayer.x);
                 spritePlayer.setTexture(texturePlayer, true);
                 m_pWindow->draw(spritePlayer);
             }

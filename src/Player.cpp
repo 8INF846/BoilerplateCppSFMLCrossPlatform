@@ -8,8 +8,12 @@ Player::Player(Map& map) : m_map(map) {
     m_position.y = 0;
 }
 
-void Player::updateEnvironment(const char* pos) {
-    PlTermv coord(pos);
+void Player::updateEnvironment() {
+    PlTermv coord(2);
+    coord[0] = PlTerm((long)m_position.x);
+    coord[1] = PlTerm((long)m_position.y);
+    const std::string pos_string = std::to_string(m_position.x) + "," + std::to_string(m_position.y);
+    const char* pos = pos_string.c_str();
 
     PlTermv k(1);
     //If we detect light
@@ -37,8 +41,9 @@ void Player::updateEnvironment(const char* pos) {
 }
 
 void Player::playRound() {
-    const std::string pos_string = std::to_string(m_position.x) + "," + std::to_string(m_position.y);
-    const char* pos = pos_string.c_str();
-    updateEnvironment(pos);
-    PlCall("next_movement", PlTermv(pos)); //TODO modifier player selon le retour
+    updateEnvironment();
+    PlTermv coord(2);
+    coord[0] = PlTerm((long)m_position.x);
+    coord[1] = PlTerm((long)m_position.y);
+    PlCall("next_movement", coord); //TODO modifier player selon le retour
 }
