@@ -3,8 +3,8 @@
 #include "Map.hpp"
 #include "Knowledge.hpp"
 #include "Position.hpp"
-
 #include <vector>
+#include <SWI-cpp.h>
 
 /*
 

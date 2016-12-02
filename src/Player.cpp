@@ -2,8 +2,6 @@
 #include <iostream>
 #include <string>
 
-#include "SWI-cpp.h"
-
 Player::Player(Map& map) : m_map(map) {
     m_position.x = 0;
     m_position.y = 0;

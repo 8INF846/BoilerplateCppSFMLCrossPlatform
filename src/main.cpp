@@ -24,6 +24,15 @@ int main(int argc, char* argv[]) {
         displayerThread = displayer.start();
         displayer.waitReady();
 
+        std::cout << "Wait Spacebar" << std::endl;
+        while(displayer.isOpen()) {
+            if(displayer.updatePlayer()) {
+                std::cout << "Update Player" << std::endl;
+                player.updateEnvironment();
+                std::cout << "Wait Spacebar" << std::endl;
+                displayer.waitUpdate();
+            }
+        }
         // Do stuff with data
         /*Logic logic(data);*/
         /*Logic.start();*/

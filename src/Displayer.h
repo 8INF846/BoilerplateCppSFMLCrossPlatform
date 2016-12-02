@@ -9,6 +9,7 @@
 
 #include "Map.hpp"
 #include "Player.hpp"
+#include <iostream>
 
 class Displayer {
 public:
@@ -21,6 +22,13 @@ public:
 
     // Wait thread until displayer is ready to display data.
     void waitReady();
+
+    bool updatePlayer() {
+        if(m_updateReady) std::cout << "Update ready" << std::endl;
+        return m_updateReady;
+    }
+    void waitUpdate() { m_updateReady = false; }
+    bool isOpen() { return m_isOpen; }
 
 private:
     /* Attributes */
@@ -52,6 +60,9 @@ protected:
 
     // Handle client input.
     virtual void handleEvent(sf::Event& event);
+
+    bool m_updateReady;
+    bool m_isOpen;
 };
 
 #endif

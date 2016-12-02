@@ -7,7 +7,7 @@
 
 /* Constructors */
 Displayer::Displayer(Map &map, Player& p, int width, int height): map(map),
-player(p), m_width(width), m_height(height)
+player(p), m_width(width), m_height(height), m_updateReady(false), m_isOpen(true)
 {}
 
 /* Methods */
@@ -25,6 +25,7 @@ void Displayer::run() {
     m_pWindow = std::make_unique<sf::RenderWindow>(
     sf::VideoMode(m_width, m_height),
     "Application");
+    m_pWindow->setKeyRepeatEnabled(false);
     m_pWindow->setVerticalSyncEnabled(true);
     m_pWindow->setFramerateLimit(60);
     m_ready.unlock();
@@ -50,6 +51,12 @@ void Displayer::handleEvent(sf::Event& event) {
     switch(event.type) {
     case sf::Event::Closed:
         m_pWindow->close();
+        m_isOpen = false;
+        break;
+    case sf::Event::KeyPressed:
+        if (event.key.code == sf::Keyboard::Space) {
+            m_updateReady = true;
+        }
     default:
         break;
     }
@@ -120,7 +127,4 @@ void Displayer::drawScene() {
         }
     }
     m_pWindow->display();
-    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        player.playRound();
-    }
 }
