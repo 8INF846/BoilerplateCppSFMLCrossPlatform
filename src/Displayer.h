@@ -8,11 +8,12 @@
 #include <SFML/Graphics.hpp>
 
 #include "Map.hpp"
+#include "Player.hpp"
 
 class Displayer {
 public:
     /* Constructor */
-    Displayer(Map& map, int width = 854, int height = 480);
+    Displayer(Map& map, Player& p, int width = 854, int height = 480);
 
     /* methods */
     // Start displaying sudoku while it is being solved.
@@ -34,6 +35,7 @@ private:
 
     // Object to render
     Map& map;
+    Player& player;
 
 protected:
     /* Attributes */

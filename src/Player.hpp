@@ -32,34 +32,14 @@ enum Action {
 
 class Player {
 public:
-    static Player *instance(Map& map)
-    {
-        if (s_instance == nullptr)
-          s_instance = new Player(map);
-        return s_instance;
-    }
-
+    Player(Map& map);
     Position getPosition() { return m_position; }
     Map& getMap() { return m_map; };
-    std::vector<std::vector<Knowledge>>& getKnowledgeMap() { return m_knowledgeMap; }
 
-    void initKnowledgeMap();
     void updateEnvironment();
-
-    bool isOdor(unsigned int x, unsigned int y);
-    bool isWind(unsigned int x, unsigned int y);
-    bool isLight(unsigned int x, unsigned int y);
-    bool isUp(unsigned int x, unsigned int y);
-    bool isDown(unsigned int x, unsigned int y);
-    bool isLeft(unsigned int x, unsigned int y);
-    bool isRight(unsigned int x, unsigned int y);
-
     void playRound();
 private:
-    static Player *s_instance;
-    Player(Map& map);
     // Attributes
     Position m_position;
     Map& m_map;
-    std::vector<std::vector<Knowledge>> m_knowledgeMap;
 };

@@ -6,7 +6,9 @@
 #include <iostream>
 
 /* Constructors */
-Displayer::Displayer(Map &map, int width, int height): map(map), m_width(width), m_height(height) {}
+Displayer::Displayer(Map &map, Player& p, int width, int height): map(map),
+player(p), m_width(width), m_height(height)
+{}
 
 /* Methods */
 std::thread Displayer::start() {
@@ -119,6 +121,6 @@ void Displayer::drawScene() {
     }
     m_pWindow->display();
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        Player::instance(this->map)->playRound();
+        player.playRound();
     }
 }

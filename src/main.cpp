@@ -3,18 +3,20 @@
 
 // #include "Data.h"
 // #include "Logic.h"
-#include "Displayer.h"
+#include "SWI-cpp.h"
 #include "Rules.hpp"
+#include "Displayer.h"
+#include "Player.hpp"
 
 int main(int argc, char* argv[]) {
     PlEngine e(argv[0]);
-    PlTermv av(0);
-    PlCall("next_movement", av);
 
     // Initialize graphic interface
+    Map map;
+    Player player(map);
     for(int i = 0; i < 3; ++i)
-    GLOBALMAP.initNextRound();
-    Displayer displayer(GLOBALMAP);
+    map.initNextRound();
+    Displayer displayer(map, player);
     std::thread displayerThread;
 
     try {
