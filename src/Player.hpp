@@ -36,7 +36,7 @@ public:
     Position getPosition() { return m_position; }
     Map& getMap() { return m_map; };
 
-    void updateEnvironment();
+    void updateEnvironment(const char* pos);
     void playRound();
 private:
     // Attributes

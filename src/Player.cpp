@@ -1,16 +1,14 @@
 #include "Player.hpp"
 #include <iostream>
 #include <string>
+#include "Rules.hpp"
 
 Player::Player(Map& map) : m_map(map) {
     m_position.x = 0;
     m_position.y = 0;
 }
 
-void Player::updateEnvironment() {
-    const std::string pos_string = std::to_string(m_position.x) + "," + std::to_string(m_position.y);
-    const char* pos = pos_string.c_str();
-    std::cout << "p:" << pos << std::endl;
+void Player::updateEnvironment(const char* pos) {
     PlTermv coord(pos);
 
     PlTermv k(1);
@@ -39,5 +37,8 @@ void Player::updateEnvironment() {
 }
 
 void Player::playRound() {
-    updateEnvironment();
+    const std::string pos_string = std::to_string(m_position.x) + "," + std::to_string(m_position.y);
+    const char* pos = pos_string.c_str();
+    updateEnvironment(pos);
+    PlCall("next_movement", PlTermv(pos)); //TODO modifier player selon le retour
 }

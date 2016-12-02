@@ -4,7 +4,6 @@
 // #include "Data.h"
 // #include "Logic.h"
 #include "SWI-cpp.h"
-#include "Rules.hpp"
 #include "Displayer.h"
 #include "Player.hpp"
 
@@ -28,7 +27,7 @@ int main(int argc, char* argv[]) {
         while(displayer.isOpen()) {
             if(displayer.updatePlayer()) {
                 std::cout << "Update Player" << std::endl;
-                player.updateEnvironment();
+                player.playRound();
                 std::cout << "Wait Spacebar" << std::endl;
                 displayer.waitUpdate();
             }
