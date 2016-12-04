@@ -17,5 +17,5 @@ PREDICATE(next_movement, 2) {
 
     }
     std::cout << "Portail non trouvé, on ne bouge pas" << std::endl;
-    return DONOTHING;
+    return A1=PlTerm((long)GOSOUTH);
 }

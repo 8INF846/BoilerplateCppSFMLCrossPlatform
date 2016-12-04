@@ -16,17 +16,11 @@ public:
     const Case getCase(const unsigned int row, const unsigned int col);
     bool hasWind(const unsigned int row, const unsigned int col);
     bool hasPoop(const unsigned int row, const unsigned int col);
+    void shoot(const unsigned int row, const unsigned int col);
 
-    /*
-    Case operator()(int i, int j) {
-        if(i < 0 || cases.size() <= i) {
-            return Case(false);
-        }
-        if(j < 0 || cases[i].size() <= j) {
-            return Case(false);
-        }
-        return cases[i][j];
-    }*/
+    Case operator()(const unsigned int row, const unsigned  int col) {
+        return getCase(row, col);
+    }
 
 private:
     std::vector<std::vector<Case>> cases;

@@ -17,17 +17,6 @@ Si Odeur(x-1,y) & Odeur(x+1,y) & Odeur(x,y-1) & Odeur(x,y+1) => Monstre(x,y)
 Si Vent(x-1,y) & Vent(x+1,y) & Vent(x,y-1) & Vent(x,y+1) => Crevasse(x,y)
 Si Tirer(x,y) => !Monstre(x,y)
 Si !Monstre(x,y) & !Crevasse(x,y) => Safe(x,y)
-
-enum Action {
-    ShootUp,
-    ShootDown,
-    ShootLeft,
-    ShootRight,
-    MoveUp,
-    MoveDown,
-    MoveLeft,
-    MoveRight
-};
 */
 
 class Player {
@@ -38,8 +27,12 @@ public:
 
     void updateEnvironment();
     void playRound();
+    int getScore() {return score;};
 private:
     // Attributes
     Position m_position;
     Map& m_map;
+    unsigned int score;
+    
+    int getNextMovement();
 };

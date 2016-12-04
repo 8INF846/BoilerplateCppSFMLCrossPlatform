@@ -13,8 +13,6 @@ int main(int argc, char* argv[]) {
     // Initialize graphic interface
     Map map;
     Player player(map);
-    for(int i = 0; i < 3; ++i)
-    map.initNextRound();
     Displayer displayer(map, player);
     std::thread displayerThread;
 

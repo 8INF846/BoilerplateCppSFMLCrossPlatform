@@ -15,5 +15,13 @@ public:
 
 enum Movement {
     RUNOUT,
+    GONORTH,
+    GOWEST,
+    GOSOUTH,
+    GOEAST,
+    SHOOTNORTH,
+    SHOOTWEST,
+    SHOOTSOUTH,
+    SHOOTEAST,
     DONOTHING
 };

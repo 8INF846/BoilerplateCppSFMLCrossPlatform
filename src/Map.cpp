@@ -62,3 +62,10 @@ bool Map::hasPoop(const unsigned int row, const unsigned int col) {
     Case r = this->getCase(row + 1, col);
     return u.monster || d.monster || l.monster || r.monster;
 }
+
+void Map::shoot(const unsigned int row, const unsigned int col) {
+    if(row >= mapSize || col >= mapSize) {
+        return;
+    }
+    this->cases[row][col].monster = false;
+}

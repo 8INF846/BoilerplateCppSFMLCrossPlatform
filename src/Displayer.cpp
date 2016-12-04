@@ -84,6 +84,7 @@ void Displayer::drawScene() {
     texturePlayer.loadFromFile("img/player.png", sf::IntRect(0, 0, 100, 100));
 
     m_pWindow->clear(sf::Color(0, 0, 0));
+    //TODO invert r/c
     for(size_t r = 0; r < this->map.size(); ++r) {
         for(size_t c = 0; c < this->map.size(); ++c) {
             sf::Sprite sprite;
@@ -117,10 +118,11 @@ void Displayer::drawScene() {
                 spriteWind.setTexture(textureWind, true);
                 m_pWindow->draw(spriteWind);
             }
-            if(r == 0 && c == 0) {
+
+            Position posPlayer = this->player.getPosition();
+            if(r == posPlayer.x && c == posPlayer.y) {
                 sf::Sprite spritePlayer;
-                Position posPlayer = this->player.getPosition();
-                spritePlayer.setPosition(100*posPlayer.y, 100*posPlayer.x);
+                spritePlayer.setPosition(100*r, 100*c);
                 spritePlayer.setTexture(texturePlayer, true);
                 m_pWindow->draw(spritePlayer);
             }
