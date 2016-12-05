@@ -5,9 +5,6 @@
 :- dynamic(visited/2).
 :- dynamic(shooted/2).
 
-portal(X,Y) :- light(X,Y).
-runOut(X,Y) :- portal(X,Y).
-
 setVisited(X,Y) :- assert(visited(X,Y)).
 setWalkable(X,Y) :- assert(walkable(X,Y)).
 setPoop(X,Y) :- assert(poop(X,Y)).
@@ -20,57 +17,63 @@ removeWind(X,Y) :- retractall(wind(X,Y)).
 removeVisited(X,Y) :- retractall(visited(X,Y)).
 removeShooted(X,Y) :- retractall(shooted(X,Y)).
 
+/*If we find the portal*/
+portal(X,Y) :- light(X,Y).
+runOut(X,Y) :- portal(X,Y).
 
+/*If we are on a Poop, we can shoot*/
 safe(X,Y) :- visited(X,Y), not(poop(X,Y)), not(wind(X,Y)).
 
 shootNorth(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+N is Y-1,
 poop(X,Y), walkable(X,N), not(shooted(X,N)), not(visited(X,N)).
 
 shootSouth(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+S is Y+1,
 poop(X,Y), walkable(X,S), not(shooted(X,S)), not(visited(X,S)).
 
 shootWest(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+W is X-1,
 poop(X,Y), walkable(W,Y), not(shooted(W,Y)), not(visited(W,Y)).
 
 shootEast(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+E is X+1,
 poop(X,Y), walkable(E,Y), not(shooted(E,Y)), not(visited(E,Y)).
 
+/*Choose next case*/
 goNorth(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+N is Y-1,
 ((safe(X,Y), walkable(X, N)) ;
 (wind(X,Y), safe(X,N))).
 
 goSouth(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+S is Y+1,
 ((safe(X,Y), walkable(X, S)) ;
 (wind(X,Y), safe(X,S))).
 
 goWest(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+W is X-1,
 ((safe(X,Y), walkable(W, Y)) ;
 (wind(X,Y), safe(W,Y))).
 
 goEast(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+E is X+1,
 ((safe(X,Y), walkable(E, Y)) ;
 (wind(X,Y), safe(E,Y))).
 
+/*We prefer to discover new cases*/
 betterNorth(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+N is Y-1,
 goNorth(X,Y), not(visited(X,N)).
 
 betterSouth(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+S is Y+1,
 goSouth(X,Y), not(visited(X,S)).
 
 betterWest(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+W is X-1,
 goWest(X,Y), not(visited(W,Y)).
 
 betterEast(X,Y) :-
-N is Y-1, W is X-1, S is Y+1, E is X+1,
+E is X+1,
 goEast(X,Y), not(visited(E,Y)).
