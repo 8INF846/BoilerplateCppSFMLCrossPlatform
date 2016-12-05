@@ -31,7 +31,7 @@ void Map::initializeMap() {
                 this->cases[r][c] = Case(false, false, (portalC == c) && (portalR == r));
             } else if (c != portalC || r != portalR) {
                 bool isMonster = percent_rand(e1) < MONSTER_PROB;
-                bool isHole = percent_rand(e1) < HOLE_PROB; //TODO : (c==1&&r==1);//(c==0&&r==2) || (c==2&&r==0);//
+                bool isHole = percent_rand(e1) < HOLE_PROB;
                 if(isMonster) isHole = false;
                 this->cases[r][c] = Case(isMonster, isHole, false);
             }
@@ -91,7 +91,7 @@ void Map::shoot(const unsigned int col, const unsigned int row) {
     if(row >= mapSize || col >= mapSize || !this->cases[row][col].monster) {
         return;
     }
-    
+
     this->cases[row][col].monster = false;
     //Remove poop if we need
     if(!this->hasPoop(col-1, row)) {
