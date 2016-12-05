@@ -75,14 +75,14 @@ SS is Y+2, NN is Y-2, EE is X+2, WW is X-2,
 (wind(X,Y), wind(W,S), wind(E,S)) ;
 (wind(X,Y), wind(E,S), wind(X,SS))).
 
-detectHoleWest(X,Y):-
+detectHoleEast(X,Y):-
 S is Y+1, N is Y-1, E is X+1, W is X-1,
 SS is Y+2, NN is Y-2, EE is X+2, WW is X-2,
 ((wind(X,Y), wind(E,N), wind(EE,Y)) ;
 (wind(X,Y), wind(E,N), wind(E,S)) ;
 (wind(X,Y), wind(E,S), wind(EE,Y))).
 
-detectHoleEast(X,Y):-
+detectHoleWest(X,Y):-
 S is Y+1, N is Y-1, E is X+1, W is X-1,
 SS is Y+2, NN is Y-2, EE is X+2, WW is X-2,
 ((wind(X,Y), wind(W,N), wind(WW,Y)) ;

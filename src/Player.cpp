@@ -212,6 +212,7 @@ void Player::playRound() {
             score += 10*(m_map.size()*m_map.size());
             score -= 1; //Mouvement
             b_hasWin = true;
+            std::cout << "Current score : " << score << std::endl;
         }
         else {
             std::cout << "Can't go out" << std::endl;
@@ -251,4 +252,5 @@ void Player::initNextRound() {
     m_position.x = 0;
     m_position.y = 0;
     b_hasWin = false;
+    score = 0;
 }
