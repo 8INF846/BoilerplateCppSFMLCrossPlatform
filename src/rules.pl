@@ -12,12 +12,14 @@ setVisited(X,Y) :- assert(visited(X,Y)).
 setWalkable(X,Y) :- assert(walkable(X,Y)).
 setPoop(X,Y) :- assert(poop(X,Y)).
 setShooted(X,Y) :- assert(shooted(X,Y)).
-removeLight(X,Y) :- retract(light(X,Y)).
-removePoop(X,Y) :- retract(poop(X,Y)).
-removeWalkable(X,Y) :- retract(walkable(X,Y)).
-removeWind(X,Y) :- retract(wind(X,Y)).
-removeVisited(X,Y) :- retract(visited(X,Y)).
-removeShooted(X,Y) :- retract(shooted(X,Y)).
+setLight(X,Y) :- assert(light(X,Y)).
+removeLight(X,Y) :- retractall(light(X,Y)).
+removePoop(X,Y) :- retractall(poop(X,Y)).
+removeWalkable(X,Y) :- retractall(walkable(X,Y)).
+removeWind(X,Y) :- retractall(wind(X,Y)).
+removeVisited(X,Y) :- retractall(visited(X,Y)).
+removeShooted(X,Y) :- retractall(shooted(X,Y)).
+
 
 safe(X,Y) :- visited(X,Y), not(poop(X,Y)), not(wind(X,Y)).
 

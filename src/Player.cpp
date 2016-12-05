@@ -31,9 +31,7 @@ void Player::updateEnvironment() {
     }
     if(m_map.hasPoop(m_position.x, m_position.y)) {
         std::cout << "Poop at pos " << pos << std::endl;
-        k[0] = PlCompound("poop", coord);
-        PlQuery q("assert", k);
-        q.next_solution();
+        PlCall("setPoop", coord);
     }
     if(m_map.getCase(m_position.x, m_position.y - 1).walkable) {
         PlTermv argWalk(2);
@@ -64,14 +62,14 @@ void Player::updateEnvironment() {
 
 int Player::getNextMovement() {
     PlTermv coord(2);
-    coord[0] = PlTerm((long)m_position.x);
-    coord[1] = PlTerm((long)m_position.y);
+    coord[0] = (long)m_position.x;
+    coord[1] = (long)m_position.y;
     PlTermv coordsouth(2);
-    coordsouth[0] = PlTerm((long)m_position.x);
-    coordsouth[1] = PlTerm((long)(m_position.y+1));
+    coordsouth[0] = (long)m_position.x;
+    coordsouth[1] = (long)(m_position.y+1);
     PlTermv coordNorth(2);
-    coordNorth[0] = PlTerm((long)m_position.x);
-    coordNorth[1] = PlTerm((long)m_position.y-1);
+    coordNorth[0] = (long)m_position.x;
+    coordNorth[1] = (long)m_position.y-1;
 
     if(PlCall("runOut", coord)) {
         return RUNOUT;
@@ -163,7 +161,7 @@ void Player::playRound() {
         break;
     case SHOOTNORTH:
         std::cout << "SHOOTNORTH" << std::endl;
-        this->m_map.shoot(m_position.x, m_position.y+1);
+        this->m_map.shoot(m_position.x, m_position.y-1);
         break;
     case SHOOTWEST:
         std::cout << "SHOOTWEST" << std::endl;
@@ -184,11 +182,11 @@ void Player::playRound() {
     }
 
     PlTermv argGoS(2);
-    argGoS[0] = 0;
-    argGoS[1] = 0;
+    argGoS[0] = (long)m_position.x;
+    argGoS[1] = (long)m_position.y;
     PlTermv argS(2);
-    argS[0] = 0;
-    argS[1] = 1;
+    argS[0] = (long)m_position.x;
+    argS[1] = (long)(m_position.y+1);
     if(PlCall("goSouth", argGoS)) {
         std::cout << "can go south" << std::endl;
     } else {

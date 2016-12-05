@@ -18,8 +18,11 @@ void Map::initializeMap() {
     std::default_random_engine e1(r());
     std::uniform_int_distribution<int> portal_pos_rand(0, this->mapSize-1);
     std::uniform_int_distribution<int> percent_rand(0, 100);
-    unsigned int portalR = portal_pos_rand(e1);
-    unsigned int portalC = portal_pos_rand(e1);
+    unsigned int portalR = 0; unsigned int portalC = 0;
+    while(portalR == 0 || portalC == 0) {
+        portalR = portal_pos_rand(e1);
+        portalC =  portal_pos_rand(e1);
+    }
     this->cases[portalR][portalC] = Case(false, false, true);
     //2. Init the others
     for(size_t r = 0; r < this->mapSize; ++r) {
@@ -27,8 +30,8 @@ void Map::initializeMap() {
             if(c == 0 && r == 0) {
                 this->cases[r][c] = Case(false, false, (portalC == c) && (portalR == r));
             } else if (c != portalC || r != portalR) {
-                bool isMonster = false;//(c==1&&r==0);//percent_rand(e1) < MONSTER_PROB;
-                bool isHole = false;//percent_rand(e1) < HOLE_PROB;
+                bool isMonster = percent_rand(e1) < MONSTER_PROB;
+                bool isHole = percent_rand(e1) < HOLE_PROB;
                 if(isMonster) isHole = false;
                 this->cases[r][c] = Case(isMonster, isHole, false);
             }
@@ -95,18 +98,35 @@ void Map::shoot(const unsigned int col, const unsigned int row) {
         coord[0] = (long)col-1;
         coord[1] = (long)row;
         PlCall("removePoop", coord);
+        if(PlCall("poop", coord)) {
+            std::cout << "NOT NORMAL" << std::endl;
+        } else {
+            std::cout << "NORMAL" << std::endl;
+        }
     }
     if(!this->hasPoop(col+1, row)) {
+        std::cout << "retract poop east" << std::endl;
         PlTermv coord(2);
         coord[0] = (long)col+1;
         coord[1] = (long)row;
         PlCall("removePoop", coord);
+        if(PlCall("poop", coord)) {
+            std::cout << "NOT NORMAL" << std::endl;
+        } else {
+            std::cout << "NORMAL" << std::endl;
+        }
     }
     if(!this->hasPoop(col, row-1)) {
+        std::cout << "retract poop north" << std::endl;
         PlTermv coord(2);
         coord[0] = (long)col;
         coord[1] = (long)row-1;
         PlCall("removePoop", coord);
+        if(PlCall("poop", coord)) {
+            std::cout << "NOT NORMAL" << std::endl;
+        } else {
+            std::cout << "NORMAL" << std::endl;
+        }
     }
     if(!this->hasPoop(col, row+1)) {
         std::cout << "retract poop south" << std::endl;
@@ -114,5 +134,10 @@ void Map::shoot(const unsigned int col, const unsigned int row) {
         coord[0] = (long)col;
         coord[1] = (long)row+1;
         PlCall("removePoop", coord);
+        if(PlCall("poop", coord)) {
+            std::cout << "NOT NORMAL" << std::endl;
+        } else {
+            std::cout << "NORMAL" << std::endl;
+        }
     }
 }
