@@ -88,7 +88,7 @@ void Displayer::drawScene() {
     for(size_t r = 0; r < this->map.size(); ++r) {
         for(size_t c = 0; c < this->map.size(); ++c) {
             sf::Sprite sprite;
-            Case caseToRender = this->map.getCase(r, c);
+            Case caseToRender = this->map.getCase(c, r);
             if(caseToRender.portal) {
                 sprite.setTexture(texturePortal, true);
             } else if(caseToRender.hole) {
@@ -103,26 +103,26 @@ void Displayer::drawScene() {
                 }
             }
 
-            sprite.setPosition(100*r, 100*c);
+            sprite.setPosition(100*c, 100*r);
             m_pWindow->draw(sprite);
 
-            if(this->map.hasPoop(r, c)) {
+            if(this->map.hasPoop(c, r)) {
                 sf::Sprite spritePoop;
-                spritePoop.setPosition(100*r, 100*c);
+                spritePoop.setPosition(100*c, 100*r);
                 spritePoop.setTexture(texturePoop, true);
                 m_pWindow->draw(spritePoop);
             }
-            if(this->map.hasWind(r, c)) {
+            if(this->map.hasWind(c, r)) {
                 sf::Sprite spriteWind;
-                spriteWind.setPosition(100*r, 100*c);
+                spriteWind.setPosition(100*c, 100*r);
                 spriteWind.setTexture(textureWind, true);
                 m_pWindow->draw(spriteWind);
             }
 
             Position posPlayer = this->player.getPosition();
-            if(r == posPlayer.x && c == posPlayer.y) {
+            if(c == posPlayer.x && r == posPlayer.y) {
                 sf::Sprite spritePlayer;
-                spritePlayer.setPosition(100*r, 100*c);
+                spritePlayer.setPosition(100*c, 100*r);
                 spritePlayer.setTexture(texturePlayer, true);
                 m_pWindow->draw(spritePlayer);
             }

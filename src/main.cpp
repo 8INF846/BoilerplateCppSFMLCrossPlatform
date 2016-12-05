@@ -28,6 +28,10 @@ int main(int argc, char* argv[]) {
                 player.playRound();
                 std::cout << "Wait Spacebar" << std::endl;
                 displayer.waitUpdate();
+                if(player.hasWin()) {
+                    map.initNextRound();
+                    player.initNextRound();
+                }
             }
         }
         // Do stuff with data

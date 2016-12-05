@@ -13,13 +13,13 @@ public:
 
     size_t size() { return mapSize; }
 
-    const Case getCase(const unsigned int row, const unsigned int col);
-    bool hasWind(const unsigned int row, const unsigned int col);
-    bool hasPoop(const unsigned int row, const unsigned int col);
-    void shoot(const unsigned int row, const unsigned int col);
+    const Case getCase(const unsigned int col, const unsigned int row);
+    bool hasWind(const unsigned int col, const unsigned int row);
+    bool hasPoop(const unsigned int col, const unsigned int row);
+    void shoot(const unsigned int col, const unsigned int row);
 
-    Case operator()(const unsigned int row, const unsigned  int col) {
-        return getCase(row, col);
+    Case operator()(const unsigned int col, const unsigned int row) {
+        return this->getCase(col, row);
     }
 
 private:

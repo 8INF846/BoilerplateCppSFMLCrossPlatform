@@ -28,11 +28,14 @@ public:
     void updateEnvironment();
     void playRound();
     int getScore() {return score;};
+    void initNextRound();
+    bool hasWin() { return b_hasWin; }
 private:
     // Attributes
     Position m_position;
     Map& m_map;
     unsigned int score;
-    
+    bool b_hasWin;
+
     int getNextMovement();
 };

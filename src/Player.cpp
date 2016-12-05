@@ -2,16 +2,16 @@
 #include <iostream>
 #include <string>
 #include "Rules.hpp"
+#include <random>
 
 Player::Player(Map& map) : m_map(map) {
-    m_position.x = 0;
-    m_position.y = 0;
+    this->initNextRound();
 }
 
 void Player::updateEnvironment() {
     PlTermv coord(2);
-    coord[0] = PlTerm((long)m_position.x);
-    coord[1] = PlTerm((long)m_position.y);
+    coord[0] = (long)m_position.x;
+    coord[1] = (long)m_position.y;
     const std::string pos_string = std::to_string(m_position.x) + "," + std::to_string(m_position.y);
     const char* pos = pos_string.c_str();
 
@@ -37,39 +37,29 @@ void Player::updateEnvironment() {
     }
     if(m_map.getCase(m_position.x, m_position.y - 1).walkable) {
         PlTermv argWalk(2);
-        argWalk[0] = PlTerm((long)m_position.x);
-        argWalk[1] = PlTerm((long)(m_position.y-1));
-        k[0] = PlCompound("walkable", argWalk);
-        PlQuery q("assert", k);
-        q.next_solution();
+        argWalk[0] = (long)m_position.x;
+        argWalk[1] = (long)(m_position.y-1);
+        PlCall("setWalkable", argWalk);
     }
     if(m_map.getCase(m_position.x, m_position.y + 1).walkable) {
         PlTermv argWalk(2);
-        argWalk[0] = PlTerm((long)m_position.x);
-        argWalk[1] = PlTerm((long)(m_position.y+1));
-        k[0] = PlCompound("walkable", argWalk);
-        PlQuery q("assert", k);
-        q.next_solution();
+        argWalk[0] = (long)m_position.x;
+        argWalk[1] = (long)(m_position.y+1);
+        PlCall("setWalkable", argWalk);
     }
     if(m_map.getCase(m_position.x - 1, m_position.y).walkable) {
         PlTermv argWalk(2);
-        argWalk[0] = PlTerm((long)(m_position.x-1));
-        argWalk[1] = PlTerm((long)m_position.y);
-        k[0] = PlCompound("walkable", argWalk);
-        PlQuery q("assert", k);
-        q.next_solution();
+        argWalk[0] = (long)(m_position.x-1);
+        argWalk[1] = (long)m_position.y;
+        PlCall("setWalkable", argWalk);
     }
     if(m_map.getCase(m_position.x + 1, m_position.y).walkable) {
         PlTermv argWalk(2);
-        argWalk[0] = PlTerm((long)(m_position.x+1));
-        argWalk[1] = PlTerm((long)m_position.y);
-        k[0] = PlCompound("walkable", argWalk);
-        PlQuery q("assert", k);
-        q.next_solution();
+        argWalk[0] = (long)(m_position.x+1);
+        argWalk[1] = (long)m_position.y;
+        PlCall("setWalkable", argWalk);
     }
-    k[0] = PlCompound("visited", coord);
-    PlQuery q("assert", k);
-    q.next_solution();
+    PlCall("setVisited", coord);
 }
 
 int Player::getNextMovement() {
@@ -87,18 +77,6 @@ int Player::getNextMovement() {
         return RUNOUT;
     }
 
-    if(PlCall("safe", coord)) {
-        std::cout << "SAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFE" << std::endl;
-    }
-    if(PlCall("walkable", coordsouth)) {
-        std::cout << "OK SOUTHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh" << std::endl;
-    }
-    if(PlCall("goSouth", coord)) {
-        std::cout << "CAN GO SOUTHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHh" << std::endl;
-    }
-    if(PlCall("visited", coordNorth)) {
-        std::cout << "VISITED NOOOOOORTH" << std::endl;
-    }
     if(PlCall("shootNorth", coord)) {
         return SHOOTNORTH;
     }
@@ -111,17 +89,57 @@ int Player::getNextMovement() {
     if(PlCall("shootEast", coord)) {
         return SHOOTEAST;
     }
-    if(PlCall("goNorth", coord)) {
+
+    if(PlCall("betterNorth", coord)) {
         return GONORTH;
     }
-    if(PlCall("goSouth", coord)) {
+    if(PlCall("betterSouth", coord)) {
         return GOSOUTH;
     }
-    if(PlCall("goWest", coord)) {
+    if(PlCall("betterWest", coord)) {
         return GOWEST;
     }
-    if(PlCall("goEast", coord)) {
+    if(PlCall("betterEast", coord)) {
         return GOEAST;
+    }
+
+    std::vector<int> canMove;
+    if(PlCall("goNorth", coord)) {
+        canMove.push_back(0);
+    }
+    if(PlCall("goSouth", coord)) {
+        canMove.push_back(1);
+    }
+    if(PlCall("goWest", coord)) {
+        canMove.push_back(2);
+    }
+    if(PlCall("goEast", coord)) {
+        canMove.push_back(3);
+    }
+
+    if(canMove.size() > 0) {
+        std::random_device r;
+        std::default_random_engine e1(r());
+        std::uniform_int_distribution<int> uniform_dist(0, canMove.size());
+        int m = uniform_dist(e1);
+        switch (canMove[m])
+        {
+        case 0:
+            return GONORTH;
+            break;
+        case 1:
+            return GOSOUTH;
+            break;
+        case 2:
+            return GOWEST;
+            break;
+        case 3:
+            return GOEAST;
+            break;
+        default:
+            /* code */
+            break;
+        }
     }
     return DONOTHING;
 }
@@ -129,6 +147,7 @@ int Player::getNextMovement() {
 void Player::playRound() {
     this->updateEnvironment();
     int nextMovement = this->getNextMovement();
+    std::cout << nextMovement << std::endl;
     switch(nextMovement) {
     case GONORTH:
         m_position.y -= 1;
@@ -143,15 +162,19 @@ void Player::playRound() {
         m_position.x += 1;
         break;
     case SHOOTNORTH:
-        this->m_map.shoot(m_position.x, m_position.y-1);
+        std::cout << "SHOOTNORTH" << std::endl;
+        this->m_map.shoot(m_position.x, m_position.y+1);
         break;
     case SHOOTWEST:
+        std::cout << "SHOOTWEST" << std::endl;
         this->m_map.shoot(m_position.x-1, m_position.y);
         break;
     case SHOOTSOUTH:
+        std::cout << "SHOOTSOUTH" << std::endl;
         this->m_map.shoot(m_position.x, m_position.y+1);
         break;
     case SHOOTEAST:
+        std::cout << "SHOOTEAST" << std::endl;
         this->m_map.shoot(m_position.x+1, m_position.y);
         break;
     case RUNOUT:
@@ -160,12 +183,42 @@ void Player::playRound() {
         break;
     }
 
+    PlTermv argGoS(2);
+    argGoS[0] = 0;
+    argGoS[1] = 0;
+    PlTermv argS(2);
+    argS[0] = 0;
+    argS[1] = 1;
+    if(PlCall("goSouth", argGoS)) {
+        std::cout << "can go south" << std::endl;
+    } else {
+        std::cout << "can not go south" << std::endl;
+    }
+    //((safe(X,Y), walkable(X, S)) ; visited(X,Y), not(poop(X,Y)), not(wind(X,Y)).
+    if(PlCall("safe", argGoS)) {
+        std::cout << "safe" << std::endl;
+    } else {
+        std::cout << "not safe" << std::endl;
+    }
+    if(PlCall("visited", argGoS)) {
+        std::cout << "visited" << std::endl;
+    } else {
+        std::cout << "not visited" << std::endl;
+    }
+    if(PlCall("poop", argGoS)) {
+        std::cout << "poop" << std::endl;
+    } else {
+        std::cout << "not poop" << std::endl;
+    }
+    //(wind(X,Y), safe(X,S))).
+
     switch(nextMovement) {
     case RUNOUT:
         if(this->m_map.getCase(m_position.x, m_position.y).portal) {
             std::cout << "Go out" << std::endl;
             score += 10*(m_map.size()*m_map.size());
             score -= 1; //Mouvement
+            b_hasWin = true;
         }
         else {
             std::cout << "Can't go out" << std::endl;
@@ -193,4 +246,10 @@ void Player::playRound() {
     default:
         break;
     }
+}
+
+void Player::initNextRound() {
+    m_position.x = 0;
+    m_position.y = 0;
+    b_hasWin = false;
 }

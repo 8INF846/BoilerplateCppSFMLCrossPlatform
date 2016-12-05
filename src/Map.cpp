@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <random>
+#include "SWI-cpp.h"
 
 #define MONSTER_PROB  10
 #define HOLE_PROB     5
@@ -25,9 +26,9 @@ void Map::initializeMap() {
         for(size_t c = 0; c < this->mapSize; ++c) {
             if(c == 0 && r == 0) {
                 this->cases[r][c] = Case(false, false, (portalC == c) && (portalR == r));
-            } else if (c != portalC && r != portalR) {
-                bool isMonster = percent_rand(e1) < MONSTER_PROB;
-                bool isHole = percent_rand(e1) < HOLE_PROB;
+            } else if (c != portalC || r != portalR) {
+                bool isMonster = false;//(c==1&&r==0);//percent_rand(e1) < MONSTER_PROB;
+                bool isHole = false;//percent_rand(e1) < HOLE_PROB;
                 if(isMonster) isHole = false;
                 this->cases[r][c] = Case(isMonster, isHole, false);
             }
@@ -35,7 +36,7 @@ void Map::initializeMap() {
     }
 }
 
-const Case Map::getCase(const unsigned int row, const unsigned int col) {
+const Case Map::getCase(const unsigned int col, const unsigned int row) {
     if(row >= mapSize || col >= mapSize) {
         return Case(false);
     }
@@ -45,27 +46,73 @@ const Case Map::getCase(const unsigned int row, const unsigned int col) {
 void Map::initNextRound() {
     ++this->mapSize;
     this->initializeMap();
+    for(size_t r = 0; r < this->mapSize; ++r) {
+        for(size_t c = 0; c < this->mapSize; ++c) {
+            PlTermv arg(2);
+            arg[0] = (long)c;
+            arg[1] = (long)r;
+            PlCall("removeLight", arg);
+            PlCall("removePoop", arg);
+            PlCall("removeWind", arg);
+            PlCall("removeWalkable", arg);
+            PlCall("removeVisited", arg);
+            PlCall("removeShooted", arg);
+        }
+    }
 }
 
-bool Map::hasWind(const unsigned int row, const unsigned int col) {
-    Case u = this->getCase(row, col - 1);
-    Case d = this->getCase(row, col + 1);
-    Case l = this->getCase(row - 1, col);
-    Case r = this->getCase(row + 1, col);
+bool Map::hasWind(const unsigned int col, const unsigned int row) {
+    Case u = this->getCase(col, row - 1);
+    Case d = this->getCase(col, row + 1);
+    Case l = this->getCase(col - 1, row);
+    Case r = this->getCase(col + 1, row);
     return u.hole || d.hole || l.hole || r.hole;
 }
 
-bool Map::hasPoop(const unsigned int row, const unsigned int col) {
-    Case u = this->getCase(row, col - 1);
-    Case d = this->getCase(row, col + 1);
-    Case l = this->getCase(row - 1, col);
-    Case r = this->getCase(row + 1, col);
+bool Map::hasPoop(const unsigned int col, const unsigned int row) {
+    Case u = this->getCase(col, row - 1);
+    Case d = this->getCase(col, row + 1);
+    Case l = this->getCase(col - 1, row);
+    Case r = this->getCase(col + 1, row);
     return u.monster || d.monster || l.monster || r.monster;
 }
 
-void Map::shoot(const unsigned int row, const unsigned int col) {
-    if(row >= mapSize || col >= mapSize) {
+void Map::shoot(const unsigned int col, const unsigned int row) {
+
+    PlTermv currentPos(2);
+    currentPos[0] = (long)col;
+    currentPos[1] = (long)row;
+    PlCall("setShooted", currentPos);
+    std::cout << "[ADD]assert(shooted(" << col << "," << row << "))" << std::endl;
+
+    if(row >= mapSize || col >= mapSize || !this->cases[row][col].monster) {
         return;
     }
     this->cases[row][col].monster = false;
+    if(!this->hasPoop(col-1, row)) {
+        std::cout << "retract poop west" << std::endl;
+        PlTermv coord(2);
+        coord[0] = (long)col-1;
+        coord[1] = (long)row;
+        PlCall("removePoop", coord);
+    }
+    if(!this->hasPoop(col+1, row)) {
+        PlTermv coord(2);
+        coord[0] = (long)col+1;
+        coord[1] = (long)row;
+        PlCall("removePoop", coord);
+    }
+    if(!this->hasPoop(col, row-1)) {
+        PlTermv coord(2);
+        coord[0] = (long)col;
+        coord[1] = (long)row-1;
+        PlCall("removePoop", coord);
+    }
+    if(!this->hasPoop(col, row+1)) {
+        std::cout << "retract poop south" << std::endl;
+        PlTermv coord(2);
+        coord[0] = (long)col;
+        coord[1] = (long)row+1;
+        PlCall("removePoop", coord);
+    }
 }
