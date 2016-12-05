@@ -1,4 +1,4 @@
-#include "Displayer.h"
+#include "Displayer.hpp"
 #include "Player.hpp"
 #include "SWI-cpp.h"
 #include <iostream>
@@ -23,7 +23,7 @@ void Displayer::run() {
     // Open window
     m_pWindow = std::make_unique<sf::RenderWindow>(
     sf::VideoMode(m_width, m_height),
-    "Application");
+    "TP3 IA, the endless forest.");
     m_pWindow->setKeyRepeatEnabled(false);
     m_pWindow->setVerticalSyncEnabled(true);
     m_pWindow->setFramerateLimit(60);
@@ -63,6 +63,7 @@ void Displayer::handleEvent(sf::Event& event) {
 
 // Default
 void Displayer::drawScene() {
+    //Load texture
     sf::Texture textureWalkable1;
     textureWalkable1.loadFromFile("img/walkable1.png", sf::IntRect(0, 0, 100, 100));
     sf::Texture textureWalkable2;
@@ -82,9 +83,11 @@ void Displayer::drawScene() {
     sf::Texture texturePlayer;
     texturePlayer.loadFromFile("img/player.png", sf::IntRect(0, 0, 100, 100));
 
+    //Scale size
     unsigned int size = this->m_pWindow->getSize().x / this->map.size();
     float scaling = (float)size/100.;
 
+    //Draw scene
     m_pWindow->clear(sf::Color(0, 0, 0));
     for(size_t r = 0; r < this->map.size(); ++r) {
         for(size_t c = 0; c < this->map.size(); ++c) {
@@ -97,11 +100,7 @@ void Displayer::drawScene() {
             } else if(caseToRender.monster) {
                 sprite.setTexture(textureMonster, true);
             } else if (caseToRender.walkable) {
-                if((r+c) % 2 == 0) {
-                    sprite.setTexture(textureWalkable1, true);
-                } else  {
-                    sprite.setTexture(textureWalkable2, true);
-                }
+                sprite.setTexture(((r+c) % 2 == 0) ? textureWalkable1 : textureWalkable2, true);
             }
 
             sprite.setPosition(size*c, size*r);

@@ -2,7 +2,7 @@
 #include <exception>
 
 #include "SWI-cpp.h"
-#include "Displayer.h"
+#include "Displayer.hpp"
 #include "Player.hpp"
 
 int main(int argc, char* argv[]) {
@@ -26,6 +26,10 @@ int main(int argc, char* argv[]) {
                 std::cout << "Wait Spacebar" << std::endl;
                 displayer.waitUpdate();
                 if(player.hasWin()) {
+                    std::cout << "#################################" << std::endl
+                              << "#           PLAYER WINS         #" << std::endl
+                              << "#################################" << std::endl
+                              << "[        INIT NEXT LEVEL        ]" << std::endl;
                     map.initNextRound();
                     player.initNextRound();
                 }

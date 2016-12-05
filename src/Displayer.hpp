@@ -23,7 +23,7 @@ public:
     void waitReady();
 
     bool updatePlayer() {
-        if(m_updateReady) std::cout << "Update ready" << std::endl;
+        if(m_updateReady) std::cout << "Update player" << std::endl;
         return m_updateReady;
     }
     void waitUpdate() { m_updateReady = false; }

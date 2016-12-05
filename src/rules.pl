@@ -94,23 +94,23 @@ E is X+1,
 goEast(X,Y), not(visited(E,Y)).
 
 goDieInSouth(X,Y):-
-E is X+1, S is Y+1, N is Y-1, W is X-1,
+S is Y+1,
 wind(X,Y), walkable(X,S), not(visited(X,S)).
 
 goDieInNorth(X,Y):-
-E is X+1, S is Y+1, N is Y-1, W is X-1,
+N is Y-1,
 wind(X,Y), walkable(X,N), not(visited(X,N)).
 
 goDieInEast(X,Y):-
-E is X+1, S is Y+1, N is Y-1, W is X-1,
+E is X+1,
 wind(X,Y), walkable(E,Y), not(visited(E,Y)).
 
 goDieInWest(X,Y):-
-E is X+1, S is Y+1, N is Y-1, W is X-1,
+W is X-1,
 wind(X,Y), walkable(W,Y), not(visited(W,Y)).
 
 /*TODO:
   .w   .wH
   wHw  w.w
-  .w.  Hw. 
+  .w.  Hw.
 */

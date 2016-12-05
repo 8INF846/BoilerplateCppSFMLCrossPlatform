@@ -1,10 +1,22 @@
 #pragma once
 
 #include "Map.hpp"
-#include "Knowledge.hpp"
 #include "Position.hpp"
 #include <vector>
 #include <SWI-cpp.h>
+
+enum Movement {
+    RUNOUT,
+    GONORTH,
+    GOWEST,
+    GOSOUTH,
+    GOEAST,
+    SHOOTNORTH,
+    SHOOTWEST,
+    SHOOTSOUTH,
+    SHOOTEAST,
+    DONOTHING
+};
 
 class Player {
 public:
@@ -13,9 +25,9 @@ public:
     Map& getMap() { return m_map; };
 
     void updateEnvironment();
+    void initNextRound();
     void playRound();
     int getScore() {return score;};
-    void initNextRound();
     bool hasWin() { return b_hasWin; }
 private:
     // Attributes
@@ -23,6 +35,6 @@ private:
     Map& m_map;
     unsigned int score;
     bool b_hasWin;
-
-    int getNextMovement();
+    //Return next action
+    Movement getNextMovement();
 };

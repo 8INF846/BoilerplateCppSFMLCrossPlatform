@@ -7,7 +7,6 @@ public:
     bool hole;
     bool portal;
     bool walkable;
-    bool visited;
 
     // Constructors
     Case()  : monster(false)

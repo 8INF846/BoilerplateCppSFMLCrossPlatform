@@ -49,6 +49,7 @@ const Case Map::getCase(const unsigned int col, const unsigned int row) {
 void Map::initNextRound() {
     ++this->mapSize;
     this->initializeMap();
+    //remove predicate from prolog database
     for(size_t r = 0; r < this->mapSize; ++r) {
         for(size_t c = 0; c < this->mapSize; ++c) {
             PlTermv arg(2);
@@ -82,58 +83,39 @@ bool Map::hasPoop(const unsigned int col, const unsigned int row) {
 }
 
 void Map::shoot(const unsigned int col, const unsigned int row) {
-
     PlTermv currentPos(2);
     currentPos[0] = (long)col;
     currentPos[1] = (long)row;
     PlCall("setShooted", currentPos);
-    std::cout << "[ADD]assert(shooted(" << col << "," << row << "))" << std::endl;
 
     if(row >= mapSize || col >= mapSize || !this->cases[row][col].monster) {
         return;
     }
+    
     this->cases[row][col].monster = false;
+    //Remove poop if we need
     if(!this->hasPoop(col-1, row)) {
-        std::cout << "retract poop west" << std::endl;
         PlTermv coord(2);
         coord[0] = (long)col-1;
         coord[1] = (long)row;
         PlCall("removePoop", coord);
     }
     if(!this->hasPoop(col+1, row)) {
-        std::cout << "retract poop east" << std::endl;
         PlTermv coord(2);
         coord[0] = (long)col+1;
         coord[1] = (long)row;
         PlCall("removePoop", coord);
-        if(PlCall("poop", coord)) {
-            std::cout << "NOT NORMAL" << std::endl;
-        } else {
-            std::cout << "NORMAL" << std::endl;
-        }
     }
     if(!this->hasPoop(col, row-1)) {
-        std::cout << "retract poop north" << std::endl;
         PlTermv coord(2);
         coord[0] = (long)col;
         coord[1] = (long)row-1;
         PlCall("removePoop", coord);
-        if(PlCall("poop", coord)) {
-            std::cout << "NOT NORMAL" << std::endl;
-        } else {
-            std::cout << "NORMAL" << std::endl;
-        }
     }
     if(!this->hasPoop(col, row+1)) {
-        std::cout << "retract poop south" << std::endl;
         PlTermv coord(2);
         coord[0] = (long)col;
         coord[1] = (long)row+1;
         PlCall("removePoop", coord);
-        if(PlCall("poop", coord)) {
-            std::cout << "NOT NORMAL" << std::endl;
-        } else {
-            std::cout << "NORMAL" << std::endl;
-        }
     }
 }
