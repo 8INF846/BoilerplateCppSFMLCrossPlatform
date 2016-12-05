@@ -83,8 +83,10 @@ void Displayer::drawScene() {
     sf::Texture texturePlayer;
     texturePlayer.loadFromFile("img/player.png", sf::IntRect(0, 0, 100, 100));
 
+    unsigned int size = this->m_pWindow->getSize().x / this->map.size();
+    float scaling = (float)size/100.;
+
     m_pWindow->clear(sf::Color(0, 0, 0));
-    //TODO invert r/c
     for(size_t r = 0; r < this->map.size(); ++r) {
         for(size_t c = 0; c < this->map.size(); ++c) {
             sf::Sprite sprite;
@@ -103,27 +105,31 @@ void Displayer::drawScene() {
                 }
             }
 
-            sprite.setPosition(100*c, 100*r);
+            sprite.setPosition(size*c, size*r);
+            sprite.setScale(scaling, scaling);
             m_pWindow->draw(sprite);
 
             if(this->map.hasPoop(c, r)) {
                 sf::Sprite spritePoop;
-                spritePoop.setPosition(100*c, 100*r);
+                spritePoop.setPosition(size*c, size*r);
                 spritePoop.setTexture(texturePoop, true);
+                spritePoop.setScale(scaling, scaling);
                 m_pWindow->draw(spritePoop);
             }
             if(this->map.hasWind(c, r)) {
                 sf::Sprite spriteWind;
-                spriteWind.setPosition(100*c, 100*r);
+                spriteWind.setPosition(size*c, size*r);
                 spriteWind.setTexture(textureWind, true);
+                spriteWind.setScale(scaling, scaling);
                 m_pWindow->draw(spriteWind);
             }
 
             Position posPlayer = this->player.getPosition();
             if(c == posPlayer.x && r == posPlayer.y) {
                 sf::Sprite spritePlayer;
-                spritePlayer.setPosition(100*c, 100*r);
+                spritePlayer.setPosition(size*c, size*r);
                 spritePlayer.setTexture(texturePlayer, true);
+                spritePlayer.setScale(scaling, scaling);
                 m_pWindow->draw(spritePlayer);
             }
         }
