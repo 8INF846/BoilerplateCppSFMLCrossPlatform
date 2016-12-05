@@ -1,7 +1,6 @@
 #include "Player.hpp"
 #include <iostream>
 #include <string>
-#include "Rules.hpp"
 #include <random>
 
 Player::Player(Map& map) : m_map(map) {
@@ -89,6 +88,7 @@ int Player::getNextMovement() {
     }
 
     if(PlCall("betterNorth", coord)) {
+        std::cout << "BETTERNORTH" << std::endl;
         return GONORTH;
     }
     if(PlCall("betterSouth", coord)) {
@@ -118,11 +118,12 @@ int Player::getNextMovement() {
     if(canMove.size() > 0) {
         std::random_device r;
         std::default_random_engine e1(r());
-        std::uniform_int_distribution<int> uniform_dist(0, canMove.size());
+        std::uniform_int_distribution<int> uniform_dist(0, canMove.size()-1);
         int m = uniform_dist(e1);
-        switch (canMove[m])
+        switch (canMove.at(m))
         {
         case 0:
+            std::cout << m << ":" << canMove[m] << ":" << canMove.size() <<"RANDOMNORTH" << std::endl;
             return GONORTH;
             break;
         case 1:
@@ -139,13 +140,28 @@ int Player::getNextMovement() {
             break;
         }
     }
+
+    //Last try
+    if(PlCall("goDieInNorth", coord)) {
+        std::cout << "GODIENORTH" << std::endl;
+        return GONORTH;
+    }
+    if(PlCall("goDieInSouth", coord)) {
+        return GOSOUTH;
+    }
+    if(PlCall("goDieInWest", coord)) {
+        return GOWEST;
+    }
+    if(PlCall("goDieInEast", coord)) {
+        return GOEAST;
+    }
     return DONOTHING;
 }
 
 void Player::playRound() {
     this->updateEnvironment();
     int nextMovement = this->getNextMovement();
-    std::cout << nextMovement << std::endl;
+    std::cout << "(" << m_position.x << ";" << m_position.y << ")" << std::endl;
     switch(nextMovement) {
     case GONORTH:
         m_position.y -= 1;
@@ -160,19 +176,15 @@ void Player::playRound() {
         m_position.x += 1;
         break;
     case SHOOTNORTH:
-        std::cout << "SHOOTNORTH" << std::endl;
         this->m_map.shoot(m_position.x, m_position.y-1);
         break;
     case SHOOTWEST:
-        std::cout << "SHOOTWEST" << std::endl;
         this->m_map.shoot(m_position.x-1, m_position.y);
         break;
     case SHOOTSOUTH:
-        std::cout << "SHOOTSOUTH" << std::endl;
         this->m_map.shoot(m_position.x, m_position.y+1);
         break;
     case SHOOTEAST:
-        std::cout << "SHOOTEAST" << std::endl;
         this->m_map.shoot(m_position.x+1, m_position.y);
         break;
     case RUNOUT:
@@ -181,34 +193,12 @@ void Player::playRound() {
         break;
     }
 
-    PlTermv argGoS(2);
-    argGoS[0] = (long)m_position.x;
-    argGoS[1] = (long)m_position.y;
-    PlTermv argS(2);
-    argS[0] = (long)m_position.x;
-    argS[1] = (long)(m_position.y+1);
-    if(PlCall("goSouth", argGoS)) {
-        std::cout << "can go south" << std::endl;
-    } else {
-        std::cout << "can not go south" << std::endl;
+    PlTermv a(2);
+    a[0] = (long)m_position.x;
+    a[1] = (long)(m_position.y-1);
+    if(PlCall("walkable", a)) {
+        std::cout << "walkable NORTH" << std::endl;
     }
-    //((safe(X,Y), walkable(X, S)) ; visited(X,Y), not(poop(X,Y)), not(wind(X,Y)).
-    if(PlCall("safe", argGoS)) {
-        std::cout << "safe" << std::endl;
-    } else {
-        std::cout << "not safe" << std::endl;
-    }
-    if(PlCall("visited", argGoS)) {
-        std::cout << "visited" << std::endl;
-    } else {
-        std::cout << "not visited" << std::endl;
-    }
-    if(PlCall("poop", argGoS)) {
-        std::cout << "poop" << std::endl;
-    } else {
-        std::cout << "not poop" << std::endl;
-    }
-    //(wind(X,Y), safe(X,S))).
 
     switch(nextMovement) {
     case RUNOUT:
@@ -230,6 +220,13 @@ void Player::playRound() {
         score -= 1;
         if(this->m_map.getCase(m_position.x, m_position.y).monster ||
         this->m_map.getCase(m_position.x, m_position.y).hole) {
+
+            PlTermv argHole(2);
+            argHole[0] = (long)m_position.x;
+            argHole[1] = (long)m_position.y;
+            PlCall("setVisited", argHole);
+            PlCall("setHole", argHole);
+
             score -= 10*(m_map.size()*m_map.size());
             std::cout << "Player is dead" << std::endl;
             m_position.x = 0; m_position.y = 0;

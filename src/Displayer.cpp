@@ -1,9 +1,8 @@
-#include <iostream>
-#include <algorithm>
 #include "Displayer.h"
 #include "Player.hpp"
 #include "SWI-cpp.h"
 #include <iostream>
+#include <algorithm>
 
 /* Constructors */
 Displayer::Displayer(Map &map, Player& p, int width, int height): map(map),

@@ -4,12 +4,11 @@
 #include <memory>
 #include <thread>
 #include <mutex>
-
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 #include "Map.hpp"
 #include "Player.hpp"
-#include <iostream>
 
 class Displayer {
 public:

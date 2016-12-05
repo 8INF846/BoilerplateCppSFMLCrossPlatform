@@ -21,7 +21,7 @@ void Map::initializeMap() {
     unsigned int portalR = 0; unsigned int portalC = 0;
     while(portalR == 0 || portalC == 0) {
         portalR = portal_pos_rand(e1);
-        portalC =  portal_pos_rand(e1);
+        portalC = portal_pos_rand(e1);
     }
     this->cases[portalR][portalC] = Case(false, false, true);
     //2. Init the others
@@ -31,7 +31,7 @@ void Map::initializeMap() {
                 this->cases[r][c] = Case(false, false, (portalC == c) && (portalR == r));
             } else if (c != portalC || r != portalR) {
                 bool isMonster = percent_rand(e1) < MONSTER_PROB;
-                bool isHole = percent_rand(e1) < HOLE_PROB;
+                bool isHole = percent_rand(e1) < HOLE_PROB; //TODO : (c==1&&r==1);//(c==0&&r==2) || (c==2&&r==0);//
                 if(isMonster) isHole = false;
                 this->cases[r][c] = Case(isMonster, isHole, false);
             }
@@ -60,6 +60,7 @@ void Map::initNextRound() {
             PlCall("removeWalkable", arg);
             PlCall("removeVisited", arg);
             PlCall("removeShooted", arg);
+            PlCall("removeHole", arg);
         }
     }
 }
@@ -98,11 +99,6 @@ void Map::shoot(const unsigned int col, const unsigned int row) {
         coord[0] = (long)col-1;
         coord[1] = (long)row;
         PlCall("removePoop", coord);
-        if(PlCall("poop", coord)) {
-            std::cout << "NOT NORMAL" << std::endl;
-        } else {
-            std::cout << "NORMAL" << std::endl;
-        }
     }
     if(!this->hasPoop(col+1, row)) {
         std::cout << "retract poop east" << std::endl;
